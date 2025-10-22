@@ -2,6 +2,9 @@ import {
   createJob,
   getAllJobs,
   getJobById,
+  getJobsByStatus,
+  updateJobById,
+  deleteJobById,
 } from "../services/job.service.js";
 
 export const addJob = async (req, res) => {
@@ -35,3 +38,38 @@ export const getJob = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const updateJob = async (req, res) => {
+  try {
+    const updatedJob = await updateJobById(req.params.id, req.userId, req.body);
+    return res.status(200).json(updatedJob);
+  } catch (error) {
+    console.error("Error updating job:", error);
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+export const getJobsByStatusFilter = async (req, res) => {
+  try {
+    const { status } = req.params;
+    const userId = req.userId; 
+
+    const jobs = await getJobsByStatus(status, userId);
+
+    res.status(200).json(jobs);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+export const deleteJob = async (req, res) => {
+  try {
+    await deleteJobById(req.params.id, req.userId);
+    return res.status(200).json({ message: "Job deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting job:", error);
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+
