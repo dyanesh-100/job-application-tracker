@@ -2,10 +2,12 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
+import jobRoutes from "./routes/job.routes.js";
 import cors from "cors";  
 import cookieParser from "cookie-parser";
 
 dotenv.config(); 
+
 const app = express();
 
 app.use(express.json());
@@ -22,6 +24,7 @@ app.use(
 
 
 app.use("/api/auth", authRoutes);
+app.use("/api/jobs", jobRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World");
