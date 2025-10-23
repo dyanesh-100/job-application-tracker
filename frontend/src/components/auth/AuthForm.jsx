@@ -36,8 +36,6 @@ const AuthForm = () => {
           email: formData.email,
           password: formData.password,
         });
-        
-        // Redirect to dashboard after successful login
         navigate('/dashboard');
       } else {
         await signup({
@@ -46,7 +44,7 @@ const AuthForm = () => {
           password: formData.password,
         });
         
-        // Switch to login mode and clear form after successful signup
+
         setIsLogin(true);
         setFormData({
           name: '',

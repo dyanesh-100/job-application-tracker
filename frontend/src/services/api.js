@@ -16,4 +16,13 @@ export const authAPI = {
   logout: () => api.post('/auth/logout'),
 };
 
+export const jobsAPI = {
+  createJob: (jobData) => api.post('/jobs', jobData),
+  getJobs: () => api.get('/jobs'),
+  getJobById: (id) => api.get(`/jobs/${id}`),
+  updateJob: (id, jobData) => api.put(`/jobs/${id}`, jobData),
+  deleteJob: (id) => api.delete(`/jobs/${id}`),
+  getJobsByStatus: (status) => api.get(`/jobs/status/${status}`),
+};
+
 export default api;
