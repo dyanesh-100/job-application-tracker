@@ -9,13 +9,14 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
     jobDescription: '',
     applicationDate: '',
     status: 'Applied',
+    jobLocation: '',
+    applicationLink: ''
   });
 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (job) {
-      // Format date for input field (YYYY-MM-DD)
       const applicationDate = new Date(job.applicationDate).toISOString().split('T')[0];
       setFormData({
         companyName: job.companyName,
@@ -23,6 +24,8 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
         jobDescription: job.jobDescription || '',
         applicationDate,
         status: job.status,
+        jobLocation: job.jobLocation || '',
+        applicationLink: job.applicationLink || ''
       });
     }
   }, [job]);
@@ -34,7 +37,6 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
       [name]: value,
     }));
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -112,6 +114,38 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
             {errors.jobTitle}
           </p>
         )}
+      </div>
+
+      <div>
+        <label htmlFor="jobLocation" className="block text-sm font-medium text-gray-700 mb-1">
+          Job Location
+        </label>
+        <input
+          type="text"
+          id="jobLocation"
+          name="jobLocation"
+          value={formData.jobLocation}
+          onChange={handleChange}
+          className="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all duration-200 hover:border-gray-400"
+          placeholder="Enter job location (e.g., Remote, New York, NY, etc.)"
+        />
+        <p className="mt-1 text-xs text-gray-500">Optional - City, State, Country, or Remote</p>
+      </div>
+
+      <div>
+        <label htmlFor="applicationLink" className="block text-sm font-medium text-gray-700 mb-1">
+          Application Link
+        </label>
+        <input
+          type="url"
+          id="applicationLink"
+          name="applicationLink"
+          value={formData.applicationLink}
+          onChange={handleChange}
+          className="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all duration-200 hover:border-gray-400"
+          placeholder="https://company.com/careers/job-id"
+        />
+        <p className="mt-1 text-xs text-gray-500">Optional - Link to the job posting</p>
       </div>
 
       <div>
