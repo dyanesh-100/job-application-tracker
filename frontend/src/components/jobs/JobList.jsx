@@ -1,8 +1,9 @@
 import React from 'react';
 import JobCard from './JobCard';
 
-const JobList = ({ jobs, onEdit, onDelete, loading, currentFilter }) => {
-  if (loading) {
+const JobList = ({ jobs, onEdit, onDelete, loading, currentFilter, searchQuery, searchLoading }) => {
+  // Show loading state when searching or initial loading
+  if (loading || searchLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(6)].map((_, i) => (
@@ -24,7 +25,23 @@ const JobList = ({ jobs, onEdit, onDelete, loading, currentFilter }) => {
     );
   }
 
-  if (jobs.length === 0) {
+  // Show no results message for search
+  if (searchQuery && jobs.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <svg className="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <h3 className="text-lg font-medium text-gray-900 mb-2">No results found</h3>
+        <p className="text-gray-500 max-w-md mx-auto">
+          No job applications found for "<strong>{searchQuery}</strong>". Try adjusting your search terms or clear the search to see all applications.
+        </p>
+      </div>
+    );
+  }
+
+  // Show empty state when no jobs (only when not searching)
+  if (jobs.length === 0 && !searchQuery) {
     return (
       <div className="text-center py-12">
         <svg className="mx-auto h-16 w-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,16 +61,27 @@ const JobList = ({ jobs, onEdit, onDelete, loading, currentFilter }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {jobs.map(job => (
-        <JobCard
-          key={job._id}
-          job={job}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      ))}
-    </div>
+    <>
+      {/* Search Results Info - Only show when not loading and has results */}
+      {searchQuery && jobs.length > 0 && (
+        <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <p className="text-sm text-blue-800">
+            Found <strong>{jobs.length}</strong> job application(s) for "<strong>{searchQuery}</strong>"
+          </p>
+        </div>
+      )}
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {jobs.map(job => (
+          <JobCard
+            key={job._id}
+            job={job}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ const API_BASE_URL = 'http://localhost:3000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, // This sends cookies automatically
+  withCredentials: true, 
   headers: {
     'Content-Type': 'application/json',
   },
@@ -23,6 +23,7 @@ export const jobsAPI = {
   updateJob: (id, jobData) => api.put(`/jobs/${id}`, jobData),
   deleteJob: (id) => api.delete(`/jobs/${id}`),
   getJobsByStatus: (status) => api.get(`/jobs/status/${status}`),
+  searchJobs: (query) => api.get(`/jobs/search?query=${encodeURIComponent(query)}`),
 };
 
 export default api;

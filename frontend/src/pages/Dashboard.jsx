@@ -14,9 +14,13 @@ const Dashboard = () => {
   const { 
     jobs, 
     loading, 
+    searchQuery,
     createJob, 
     updateJob, 
     deleteJob, 
+    handleSearch,
+    isInitialLoad,
+    searchLoading,
     filterJobsByStatus 
   } = useJobs();
 
@@ -81,6 +85,8 @@ const Dashboard = () => {
     setEditingJob(null);
   };
 
+  const showWelcomeMessage = jobs.length === 0 && !loading && !searchLoading && statusFilter === 'All' && !searchQuery && !isInitialLoad;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20">
@@ -112,7 +118,7 @@ const Dashboard = () => {
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
-          {jobs.length === 0 && !loading && statusFilter === 'All' && (
+          {showWelcomeMessage && (
             <div className="flex flex-col items-center justify-center text-center" style={{ minHeight: 'calc(100vh - 10rem)' }}>
               <div className="max-w-2xl p-8">
                 <svg className="mx-auto h-16 w-16 text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
@@ -134,19 +140,23 @@ const Dashboard = () => {
             </div>
           )}
 
-          {(jobs.length > 0 || statusFilter !== 'All') && (
+          {(jobs.length > 0 || statusFilter !== 'All' || searchQuery) && (
             <>
               <JobFilters
                 onStatusFilter={handleStatusFilter}
-                onSearch={() => {}} // Dummy for now
+                onSearch={handleSearch}
                 currentFilter={statusFilter}
+                searchQuery={searchQuery}
+                searchLoading={searchLoading}
               />
               <JobList
                 jobs={jobs}
                 onEdit={handleEditJob}
                 onDelete={handleDeleteJob}
-                loading={loading}
+                loading={loading || searchLoading || isInitialLoad}
                 currentFilter={statusFilter}
+                searchQuery={searchQuery}
+                searchLoading={searchLoading}
               />
             </>
           )}
