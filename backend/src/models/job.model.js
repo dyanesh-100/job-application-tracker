@@ -21,6 +21,14 @@ const jobSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    jobLocation: {
+      type: String,
+      trim: true,
+    },
+    applicationLink: {
+      type: String,
+      trim: true,
+    },
     applicationDate: {
       type: Date,
       required: [true, "Application date is required"],
