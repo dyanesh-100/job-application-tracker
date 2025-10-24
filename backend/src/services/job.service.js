@@ -42,6 +42,23 @@ export const getJobsByStatus = async (status, userId) => {
   return jobs;
 };
 
+export const searchJobs = async (userId, query) => {
+  const searchCriteria = {
+    userId,
+    $or: [
+      { companyName: { $regex: query, $options: "i" } },
+      { jobTitle: { $regex: query, $options: "i" } },
+      { applicationId: isNaN(query) ? null : Number(query) },
+    ],
+  };
+  if (searchCriteria.$or[2].applicationId === null) {
+    searchCriteria.$or.pop();
+  }
+
+  const jobs = await Job.find(searchCriteria).sort({ createdAt: -1 });
+  return jobs;
+};
+
 export const deleteJobById = async (id, userId) => {
   const job = await Job.findOneAndDelete({ _id: id, userId });
   if (!job) throw new Error("Job not found or unauthorized");

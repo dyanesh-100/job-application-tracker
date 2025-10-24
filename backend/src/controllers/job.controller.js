@@ -5,6 +5,7 @@ import {
   getJobsByStatus,
   updateJobById,
   deleteJobById,
+  searchJobs,
 } from "../services/job.service.js";
 
 export const addJob = async (req, res) => {
@@ -59,6 +60,21 @@ export const getJobsByStatusFilter = async (req, res) => {
     res.status(200).json(jobs);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+export const searchJobApplications = async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query || query.trim() === "") {
+      return res.status(400).json({ message: "Search query is required" });
+    }
+
+    const jobs = await searchJobs(req.userId, query.trim());
+    return res.status(200).json(jobs);
+  } catch (error) {
+    console.error("Error searching jobs:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
