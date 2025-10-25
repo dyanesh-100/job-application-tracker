@@ -12,7 +12,6 @@ const Header = ({ onAddJob, onLogout, showAddButton = true }) => {
             </h1>
           </div>
           <div className="flex items-center space-x-4">
-            {/* Hide Add Job button on mobile - will show floating button instead */}
             {showAddButton && (
               <div className="hidden sm:block">
                 <Button

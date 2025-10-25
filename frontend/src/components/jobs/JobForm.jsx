@@ -55,7 +55,6 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
 
     if (!isValid) {
       setShowAllErrors(true);
-      // Scroll to first error field
       const firstErrorField = Object.keys(validationErrors)[0];
       if (firstErrorField) {
         const errorElement = document.getElementById(firstErrorField);
@@ -76,7 +75,6 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
 
   const hasErrors = Object.values(errors).some(error => error !== null);
 
-  // Helper function to get display error message
   const getDisplayErrorMessage = (fieldName, error) => {
     if (!error) return null;
     
@@ -102,7 +100,6 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-      {/* Global Error Alert */}
       {showAllErrors && hasErrors && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
           <div className="flex items-start">
@@ -124,7 +121,7 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
         </div>
       )}
 
-      <div id="companyName">
+      <div>
         <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-1">
           Company Name *
         </label>
@@ -151,7 +148,7 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
         )}
       </div>
 
-      <div id="jobTitle">
+      <div>
         <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-1">
           Job Title *
         </label>
@@ -225,7 +222,7 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
         />
       </div>
 
-      <div id="applicationDate">
+      <div>
         <label htmlFor="applicationDate" className="block text-sm font-medium text-gray-700 mb-1">
           Application Date *
         </label>

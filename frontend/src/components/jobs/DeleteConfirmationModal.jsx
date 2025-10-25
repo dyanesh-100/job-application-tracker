@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../ui/Button';
 import Modal from '../ui/Modal';
 
-const DeleteConfirmModal = ({ job, isOpen, onClose, onConfirm }) => {
+const DeleteConfirmModal = ({ job, isOpen, onClose, onConfirm, loading = false }) => {
   if (!job) return null;
 
   return (
@@ -13,8 +13,20 @@ const DeleteConfirmModal = ({ job, isOpen, onClose, onConfirm }) => {
           This action cannot be undone.
         </p>
         <div className="flex justify-end space-x-3">
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button variant="danger" onClick={onConfirm}>Delete</Button>
+          <Button 
+            variant="outline" 
+            onClick={onClose}
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={onConfirm}
+            loading={loading}
+          >
+            {loading ? 'Deleting...' : 'Delete'}
+          </Button>
         </div>
       </div>
     </Modal>

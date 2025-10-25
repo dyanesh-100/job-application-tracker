@@ -53,7 +53,6 @@ const JobFilters = ({
           )}
         </div>
 
-        {/* Status Filter */}
         <div className="sm:w-48">
           <select
             value={currentFilter}
@@ -62,7 +61,7 @@ const JobFilters = ({
           >
             {statusOptions.map(status => (
               <option key={status} value={status}>
-                {status === 'All' ? 'All Status' : status}
+                {status === 'All' ? 'All applications' : status}
               </option>
             ))}
           </select>

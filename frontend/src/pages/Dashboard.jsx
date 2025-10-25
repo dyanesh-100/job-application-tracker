@@ -7,6 +7,7 @@ import JobList from '../components/jobs/JobList';
 import JobFilters from '../components/jobs/JobFilters';
 import Header from '../components/layout/Header';
 import FloatingActionButton from '../components/ui/FloatingActionButton';
+import Loading from '../components/ui/Loading';
 import Modal from '../components/ui/Modal';
 
 const Dashboard = () => {
@@ -103,8 +104,24 @@ const Dashboard = () => {
 
   const showWelcomeMessage = jobs.length === 0 && !loading && !searchLoading && statusFilter === 'All' && !searchQuery && !isInitialLoad;
 
-
   const showFloatingButton = !showWelcomeMessage;
+
+  if (isInitialLoad && jobs.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+        <Header 
+          onAddJob={() => setShowJobForm(true)}
+          onLogout={handleLogout}
+          showAddButton={true} 
+        />
+        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="px-4 sm:px-0">
+            <Loading type="grid" />
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -135,7 +152,7 @@ const Dashboard = () => {
             </div>
           )}
 
-          {(jobs.length > 0 || statusFilter !== 'All' || searchQuery) && (
+          {!showWelcomeMessage && (
             <>
               <JobFilters
                 onStatusFilter={handleStatusFilter}
@@ -148,7 +165,7 @@ const Dashboard = () => {
                 jobs={jobs}
                 onEdit={handleEditJob}
                 onDelete={handleDeleteJob}
-                loading={loading || searchLoading || isInitialLoad}
+                loading={loading || searchLoading}
                 currentFilter={statusFilter}
                 searchQuery={searchQuery}
                 searchLoading={searchLoading}

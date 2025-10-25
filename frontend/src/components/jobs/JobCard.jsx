@@ -6,6 +6,7 @@ import DeleteConfirmModal from './DeleteConfirmationModal';
 const JobCard = ({ job, onEdit, onDelete }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const formatDate = (dateString) =>
     new Date(dateString).toLocaleDateString('en-US', {
@@ -24,9 +25,16 @@ const JobCard = ({ job, onEdit, onDelete }) => {
     return colors[status] || 'bg-gray-100 text-gray-800 border border-gray-200';
   };
 
-  const handleDelete = () => {
-    onDelete(job._id);
-    setShowDeleteConfirm(false);
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete(job._id);
+    } catch (error) {
+      // Error handling is done in the parent component
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
+    }
   };
 
   const handleEditFromDetails = () => {
@@ -41,7 +49,9 @@ const JobCard = ({ job, onEdit, onDelete }) => {
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-100">
+      <div className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-100 ${
+        isDeleting ? 'opacity-60 pointer-events-none' : ''
+      }`}>
         <div className="flex justify-between items-start mb-4">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
@@ -74,7 +84,12 @@ const JobCard = ({ job, onEdit, onDelete }) => {
             <Button variant="outline" size="small" onClick={() => onEdit(job)}>
               Edit
             </Button>
-            <Button variant="danger" size="small" onClick={() => setShowDeleteConfirm(true)}>
+            <Button 
+              variant="danger" 
+              size="small" 
+              onClick={() => setShowDeleteConfirm(true)}
+              loading={isDeleting}
+            >
               Delete
             </Button>
           </div>
@@ -96,6 +111,7 @@ const JobCard = ({ job, onEdit, onDelete }) => {
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
         onConfirm={handleDelete}
+        loading={isDeleting}
       />
     </>
   );
