@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useJobs } from '../hooks/useJobs';
 import JobForm from '../components/jobs/JobForm';
 import JobList from '../components/jobs/JobList';
 import JobFilters from '../components/jobs/JobFilters';
-import Button from '../components/ui/Button';
+import Header from '../components/layout/Header';
+import FloatingActionButton from '../components/ui/FloatingActionButton';
 import Modal from '../components/ui/Modal';
 
 const Dashboard = () => {
@@ -28,6 +29,21 @@ const Dashboard = () => {
   const [editingJob, setEditingJob] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState('All');
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = window.innerHeight;
+      const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+      
+      setIsScrolled(scrollPercentage > 90);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -87,35 +103,16 @@ const Dashboard = () => {
 
   const showWelcomeMessage = jobs.length === 0 && !loading && !searchLoading && statusFilter === 'All' && !searchQuery && !isInitialLoad;
 
+
+  const showFloatingButton = !showWelcomeMessage;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      <header className="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                JobTracker
-              </h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="primary"
-                onClick={() => setShowJobForm(true)}
-                className="shadow-lg shadow-blue-500/25"
-              >
-                + Add Job
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
+      <Header 
+        onAddJob={() => setShowJobForm(true)}
+        onLogout={handleLogout}
+        showAddButton={true} 
+      />
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
           {showWelcomeMessage && (
@@ -128,14 +125,12 @@ const Dashboard = () => {
                 <p className="text-gray-600 mb-6">
                   Start tracking your job applications. Add your first job application to get started with managing your job search journey.
                 </p>
-                <Button
-                  variant="primary"
-                  size="large"
+                <button
                   onClick={() => setShowJobForm(true)}
-                  className="shadow-lg shadow-blue-500/25"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium shadow-lg shadow-blue-500/25 transition-all duration-200"
                 >
                   Add Your First Job Application
-                </Button>
+                </button>
               </div>
             </div>
           )}
@@ -162,6 +157,11 @@ const Dashboard = () => {
           )}
         </div>
       </main>
+
+      <FloatingActionButton 
+        onClick={() => setShowJobForm(true)}
+        visible={showFloatingButton && !isScrolled}
+      />
 
       <Modal
         isOpen={showJobForm || !!editingJob}

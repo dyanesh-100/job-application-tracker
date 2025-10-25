@@ -2,7 +2,7 @@ import React from 'react';
 import JobCard from './JobCard';
 
 const JobList = ({ jobs, onEdit, onDelete, loading, currentFilter, searchQuery, searchLoading }) => {
-  // Show loading state when searching or initial loading
+  
   if (loading || searchLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -25,7 +25,6 @@ const JobList = ({ jobs, onEdit, onDelete, loading, currentFilter, searchQuery, 
     );
   }
 
-  // Show no results message for search
   if (searchQuery && jobs.length === 0) {
     return (
       <div className="text-center py-12">
@@ -40,7 +39,6 @@ const JobList = ({ jobs, onEdit, onDelete, loading, currentFilter, searchQuery, 
     );
   }
 
-  // Show empty state when no jobs (only when not searching)
   if (jobs.length === 0 && !searchQuery) {
     return (
       <div className="text-center py-12">
@@ -62,7 +60,6 @@ const JobList = ({ jobs, onEdit, onDelete, loading, currentFilter, searchQuery, 
 
   return (
     <>
-      {/* Search Results Info - Only show when not loading and has results */}
       {searchQuery && jobs.length > 0 && (
         <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
           <p className="text-sm text-blue-800">
