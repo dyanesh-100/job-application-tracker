@@ -21,7 +21,7 @@ export const updateJobById = async (id, userId, updateData) => {
 
   if (!job) throw new Error("Job not found or unauthorized");
 
-  const allowedFields = ["companyName", "jobTitle", "jobDescription", "applicationDate", "status"];
+  const allowedFields = ["companyName", "jobTitle", "jobDescription", "applicationDate","jobLocation","applicationLink", "status"];
   allowedFields.forEach((field) => {
     if (updateData[field] !== undefined) job[field] = updateData[field];
   });
