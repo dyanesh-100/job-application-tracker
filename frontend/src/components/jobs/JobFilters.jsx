@@ -16,7 +16,6 @@ const JobFilters = ({
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6">
       <div className="flex flex-col sm:flex-row gap-4">
-        {/* Search Bar */}
         <div className="flex-1">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -31,13 +30,11 @@ const JobFilters = ({
               placeholder="Search by company, job title, or application ID..."
               className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
-            {/* Loading Indicator */}
             {searchLoading && (
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                 <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
-            {/* Clear Search Button */}
             {searchQuery && !searchLoading && (
               <button
                 onClick={() => onSearch('')}
@@ -49,7 +46,6 @@ const JobFilters = ({
               </button>
             )}
           </div>
-          {/* Search status message - Only show when not loading and has query */}
           {searchQuery && !searchLoading && (
             <p className="text-xs text-gray-500 mt-1">
               Searching for: "{searchQuery}"
