@@ -20,10 +20,13 @@ export const validateJobInput = (req, res, next) => {
     return res.status(400).json({ message: "Invalid application date" });
   }
 
-  const today = new Date();
-  const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+  const inputDate = new Date(date);
+  inputDate.setHours(0, 0, 0, 0);
   
-  if (date > endOfToday) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  if (inputDate > today) {
     return res
       .status(400)
       .json({ message: "Application date cannot be in the future" });
