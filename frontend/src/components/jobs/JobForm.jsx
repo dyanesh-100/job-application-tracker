@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { validateJobForm } from '../../utils/Validators';
 import Button from '../ui/Button';
 
@@ -14,6 +14,8 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
   });
 
   const [errors, setErrors] = useState({});
+  const [showAllErrors, setShowAllErrors] = useState(false);
+  const formRef = useRef(null);
 
   useEffect(() => {
     if (job) {
@@ -51,18 +53,78 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
     const { errors: validationErrors, isValid } = validateJobForm(formData);
     setErrors(validationErrors);
 
-    if (isValid) {
-      onSubmit(formData);
+    if (!isValid) {
+      setShowAllErrors(true);
+      // Scroll to first error field
+      const firstErrorField = Object.keys(validationErrors)[0];
+      if (firstErrorField) {
+        const errorElement = document.getElementById(firstErrorField);
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+      return;
     }
+
+    setShowAllErrors(false);
+    onSubmit(formData);
   };
 
   const getTodayDate = () => {
     return new Date().toISOString().split('T')[0];
   };
 
+  const hasErrors = Object.values(errors).some(error => error !== null);
+
+  // Helper function to get display error message
+  const getDisplayErrorMessage = (fieldName, error) => {
+    if (!error) return null;
+    
+    const errorMessages = {
+      companyName: {
+        'Company name is required': 'Company name is required',
+        'Company name must be at least 3 characters': 'Company name must be at least 3 characters'
+      },
+      jobTitle: {
+        'Job title is required': 'Job title is required'
+      },
+      applicationDate: {
+        'Application date is required': 'Application date is required',
+        'Application date cannot be in the future': 'Application date cannot be in the future'
+      },
+      status: {
+        'Invalid status': 'Invalid status'
+      }
+    };
+    
+    return errorMessages[fieldName]?.[error] || error;
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+      {/* Global Error Alert */}
+      {showAllErrors && hasErrors && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+          <div className="flex items-start">
+            <svg className="w-5 h-5 text-red-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <h3 className="text-sm font-medium text-red-800">
+                Please fix the following errors to continue:
+              </h3>
+              <ul className="mt-2 text-sm text-red-700 list-disc list-inside space-y-1">
+                {errors.companyName && <li>{getDisplayErrorMessage('companyName', errors.companyName)}</li>}
+                {errors.jobTitle && <li>{getDisplayErrorMessage('jobTitle', errors.jobTitle)}</li>}
+                {errors.applicationDate && <li>{getDisplayErrorMessage('applicationDate', errors.applicationDate)}</li>}
+                {errors.status && <li>{getDisplayErrorMessage('status', errors.status)}</li>}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div id="companyName">
         <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-1">
           Company Name *
         </label>
@@ -84,12 +146,12 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
-            {errors.companyName}
+            {getDisplayErrorMessage('companyName', errors.companyName)}
           </p>
         )}
       </div>
 
-      <div>
+      <div id="jobTitle">
         <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-1">
           Job Title *
         </label>
@@ -111,7 +173,7 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
-            {errors.jobTitle}
+            {getDisplayErrorMessage('jobTitle', errors.jobTitle)}
           </p>
         )}
       </div>
@@ -163,7 +225,7 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
         />
       </div>
 
-      <div>
+      <div id="applicationDate">
         <label htmlFor="applicationDate" className="block text-sm font-medium text-gray-700 mb-1">
           Application Date *
         </label>
@@ -185,7 +247,7 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
             <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
             </svg>
-            {errors.applicationDate}
+            {getDisplayErrorMessage('applicationDate', errors.applicationDate)}
           </p>
         )}
       </div>
