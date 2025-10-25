@@ -10,10 +10,8 @@ const generateToken = (userId) => {
 export const registerUser = async (name, email, password) => {
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    throw new Error("User already exists");
-    
+    throw new Error("Account already exists. Try logging in.");
   }
-
   const user = await User.create({ name, email, password });
   const token = generateToken(user._id);
 

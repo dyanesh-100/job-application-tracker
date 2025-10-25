@@ -34,7 +34,9 @@ const jobSchema = new mongoose.Schema(
       required: [true, "Application date is required"],
       validate: {
         validator: function (value) {
-          return value <= new Date();
+          const today = new Date();
+          const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+          return value <= endOfToday;
         },
         message: "Application date cannot be in the future",
       },

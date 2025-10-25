@@ -16,7 +16,14 @@ export const validateJobInput = (req, res, next) => {
   }
 
   const date = new Date(applicationDate);
-  if (isNaN(date.getTime()) || date > new Date()) {
+  if (isNaN(date.getTime())) {
+    return res.status(400).json({ message: "Invalid application date" });
+  }
+
+  const today = new Date();
+  const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+  
+  if (date > endOfToday) {
     return res
       .status(400)
       .json({ message: "Application date cannot be in the future" });
