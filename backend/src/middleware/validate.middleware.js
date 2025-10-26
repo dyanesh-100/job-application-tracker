@@ -20,16 +20,20 @@ export const validateJobInput = (req, res, next) => {
     return res.status(400).json({ message: "Invalid application date" });
   }
 
-  const inputDate = new Date(date);
-  inputDate.setHours(0, 0, 0, 0);
-  
+  const inputUTCDate = new Date(Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate()
+  ));
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  
-  if (inputDate > today) {
-    return res
-      .status(400)
-      .json({ message: "Application date cannot be in the future" });
+  const todayUTC = new Date(Date.UTC(
+    today.getUTCFullYear(),
+    today.getUTCMonth(),
+    today.getUTCDate()
+  ));
+
+  if (inputUTCDate > todayUTC) {
+    return res.status(400).json({ message: "Application date cannot be in the future" });
   }
 
   if (status && !["Applied", "Interview", "Offer", "Rejected"].includes(status)) {

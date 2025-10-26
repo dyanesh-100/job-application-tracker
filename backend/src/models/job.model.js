@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const generateApplicationId = () => {
-  return Math.floor(10000 + Math.random() * 90000); 
+  return Math.floor(10000 + Math.random() * 90000);
 };
 
 const jobSchema = new mongoose.Schema(
@@ -34,12 +34,21 @@ const jobSchema = new mongoose.Schema(
       required: [true, "Application date is required"],
       validate: {
         validator: function (value) {
-          const inputDate = new Date(value);
-          inputDate.setHours(0, 0, 0, 0);
+          // Normalize both input date and today's date to UTC date-only (ignore time)
+          const inputUTCDate = new Date(Date.UTC(
+            value.getUTCFullYear(),
+            value.getUTCMonth(),
+            value.getUTCDate()
+          ));
+
           const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          
-          return inputDate <= today;
+          const todayUTC = new Date(Date.UTC(
+            today.getUTCFullYear(),
+            today.getUTCMonth(),
+            today.getUTCDate()
+          ));
+
+          return inputUTCDate <= todayUTC;
         },
         message: "Application date cannot be in the future",
       },
