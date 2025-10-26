@@ -27,8 +27,8 @@ It also includes **authentication**, **responsive dashboard**, **CRUD modals**.
 
 ## 🧩 Tech Stack
 
-**Frontend:** React.js, Tailwind CSS  
-**Backend:** Node.js, Express.js, MongoDB + Mongoose, JWT authentication  
+- **Frontend:** React.js, Tailwind CSS  
+- **Backend:** Node.js, Express.js, MongoDB + Mongoose, JWT authentication  
 
 ---
 
@@ -73,7 +73,7 @@ cd frontend
 npm install
 ```
 
-  * Update the base URL directly in `frontend/src/services/api` (e.g., in your API utility file) to point to your backend.
+  * Update the base URL directly in `frontend/src/services/api` to point to your backend.
     Example:
 
 <!-- end list -->
@@ -120,8 +120,8 @@ npm start
 
 ## 🎥 Demo Videos
 
-  * **Desktop View:** [https://drive.google.com/file/d/1cK_iaFvXe7hBKSKMwyunDY6Bc2PXSXT3/view?usp=drive_link]
-  * **Mobile View:** [https://drive.google.com/file/d/1a0U3dubX5vOhFY8xud6uihqFfDgqlfv0/view?usp=drive_link]
+  * **Desktop View:** [**Watch Desktop Demo**](https://drive.google.com/file/d/1cK_iaFvXe7hBKSKMwyunDY6Bc2PXSXT3/view?usp=drive_link)
+  * **Mobile View:** [**Watch Mobile Demo**](https://drive.google.com/file/d/1a0U3dubX5vOhFY8xud6uihqFfDgqlfv0/view?usp=drive_link)
 
 -----
 
@@ -161,7 +161,4 @@ job-application-tracker/
 │
 └── README.md
 
-```
-
-```
 ```
