@@ -70,12 +70,13 @@ const JobForm = ({ job, onSubmit, onCancel, loading = false }) => {
   };
 
   const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const now = new Date();
+    const year = now.getUTCFullYear();
+    const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(now.getUTCDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
+
 
   const hasErrors = Object.values(errors).some(error => error !== null);
 
