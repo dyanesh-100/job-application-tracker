@@ -32,20 +32,27 @@ const Dashboard = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [isScrolled, setIsScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.innerHeight + window.scrollY;
-      const pageHeight = document.body.offsetHeight;
-      const isAtBottom = scrollPosition >= pageHeight - 150;
-      
-      setIsScrolled(isAtBottom);
-    };
+useEffect(() => {
+  const handleScroll = () => {
+    const scrollTop = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = window.innerHeight;
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); 
+    // Skip logic if content is not scrollable
+    if (scrollHeight <= clientHeight + 10) {
+      setIsScrolled(false);
+      return;
+    }
 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+    setIsScrolled(scrollPercentage > 90);
+  };
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll(); // Initialize state correctly
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
 
   const handleLogout = async () => {
     await logout();
