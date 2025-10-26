@@ -34,15 +34,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const scrollHeight = document.documentElement.scrollHeight;
-      const clientHeight = window.innerHeight;
-      const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+      const scrollPosition = window.innerHeight + window.scrollY;
+      const pageHeight = document.body.offsetHeight;
+      const isAtBottom = scrollPosition >= pageHeight - 150;
       
-      setIsScrolled(scrollPercentage > 90);
+      setIsScrolled(isAtBottom);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); 
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
