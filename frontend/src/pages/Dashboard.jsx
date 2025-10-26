@@ -38,7 +38,6 @@ useEffect(() => {
     const scrollHeight = document.documentElement.scrollHeight;
     const clientHeight = window.innerHeight;
 
-    // Skip logic if content is not scrollable
     if (scrollHeight <= clientHeight + 10) {
       setIsScrolled(false);
       return;
@@ -49,7 +48,7 @@ useEffect(() => {
   };
 
   window.addEventListener("scroll", handleScroll, { passive: true });
-  handleScroll(); // Initialize state correctly
+  handleScroll(); 
 
   return () => window.removeEventListener("scroll", handleScroll);
 }, []);

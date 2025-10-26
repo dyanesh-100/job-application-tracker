@@ -34,21 +34,20 @@ const jobSchema = new mongoose.Schema(
       required: [true, "Application date is required"],
       validate: {
         validator: function (value) {
-          // Normalize both input date and today's date to UTC date-only (ignore time)
-          const inputUTCDate = new Date(Date.UTC(
-            value.getUTCFullYear(),
-            value.getUTCMonth(),
-            value.getUTCDate()
-          ));
+          if (!value || isNaN(value.getTime())) return false;
+          const localInputDate = new Date(
+            value.getFullYear(),
+            value.getMonth(),
+            value.getDate()
+          );
 
-          const today = new Date();
-          const todayUTC = new Date(Date.UTC(
-            today.getUTCFullYear(),
-            today.getUTCMonth(),
-            today.getUTCDate()
-          ));
-
-          return inputUTCDate <= todayUTC;
+          const now = new Date();
+          const todayLocal = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+          );
+          return localInputDate <= todayLocal;
         },
         message: "Application date cannot be in the future",
       },

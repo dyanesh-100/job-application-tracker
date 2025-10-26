@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://job-application-tracker-be.vercel.app/api';
+const API_BASE_URL = 'http://localhost:3000/api';
 //'http://localhost:3000/api'
 //https://job-application-tracker-be.vercel.app/api
 const api = axios.create({
